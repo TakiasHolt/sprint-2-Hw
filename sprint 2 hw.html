@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Web Sprint 2 Challenge</title>
+  <style>
+    .widget {
+      padding: 0 0 0.5rem 0.65rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid black;
+      border-radius: 0.5rem;
+    }
+
+    .widget p {
+      font-size: 0.75rem;
+      font-style: italic;
+    }
+
+    .row>div {
+      display: inline-block;
+      background-color: lightgrey;
+      border: 1px solid grey;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+    }
+
+    #outcome {
+      font-size: 3rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <h1>Web Sprint 2 Challenge </h1>
+  <p>❗ See the last script tag for instructions on completing your Challenge</p>
+  <!-- widgets start -->
+  <section class="widget">
+    <p>Click on a square! (this widget uses the mineSweeper function)</p>
+    <div class="row" id="row1">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="row" id="row2">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="row" id="row3">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <span id="outcome"></span>
+  </section>
+  <form class="widget">
+    <p>Type a ten-digit number! (this widget uses the normalizePhoneNumber function)</p>
+    <input type="text" id="phoneNumInput" maxlength="10" />
+    <span id="normalized"></span>
+  </form>
+  <!-- widgets end -->
+
+  <!-- The first script tag loads a library called lodash that helps with testing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  <script id="challenge">
+    // In CHALLENGES 1-6 you will write JavaScript functions
+
+    // ❗ Functions are scaffolded for you, but are missing their parameters and bodies
+    // ❗ Do not rename the functions provided, and do not create any other script tags
+    // ❗ Do not modify the location of the two script tags in this document
+    // ❗ Debug properly using the Console
+
+    // 👉 CHALLENGE 1
+    function profileActivation(profile, reason) {
+  
+  if (profile.active === undefined) {
+    return "impossible to ascertain status";
+  }
+
+  
+  if (profile.active) {
+    
+    if (reason !== undefined) {
+      profile.active = false;
+      profile.reason = reason;
+    } else if (profile.reason !== undefined) {
+     
+      return "confirm status manually";
+    }
+  } else {
+    
+    if (profile.reason === undefined) {
+      return "confirm status manually";
+    }
+
+    
+    delete profile.reason;
+    profile.active = true;
+  }
+
+  
+  return profile;
+}
+
+    // 👉 CHALLENGE 2
+    function mineSweeper(grid, x, y) {
+  if (x < 1 || x > 3 || y < 1 || y > 3) {
+    return "invalid coordinates";
+  }
+  const square = grid[y - 1][x - 1];
+  if (square === "🟥") {
+    return "🟥 💀";
+  } else if (square === "🟦") {
+    return "🟦 🥳";
+  }
+}
+
+    // 👉 CHALLENGE 3
+    function booleanize(obj) {
+  for (const prop in obj) {
+    if (prop.length > 9) {
+      return "shorten all prop names to 9 chars or less";
+    }
+
+    const value = obj[prop];
+
+    if (value === 0) {
+      obj[prop] = false;
+    } else if (value === 1) {
+      obj[prop] = true;
+    } else if (value === null) {
+      delete obj[prop];
+    }
+  }
+
+  return obj;
+}
+
+    // 👉 CHALLENGE 4
+    function scrub(text, forbidden) {
+  // Split the text into an array of words
+  const words = text.split(' ');
+
+  // Iterate over each word and check if it is in the forbidden array
+  for (let i = 0; i < words.length; i++) {
+    const currentWord = words[i].toLowerCase(); // Convert to lowercase for case-insensitive comparison
+
+    // Check if the current word is in the forbidden array
+    if (forbidden.indexOf(currentWord) !== -1) {
+      // Replace the word with a string of 'x' of equal length
+      words[i] = 'x'.repeat(words[i].length);
+    }
+  }
+
+  // Join the words back into a string and return the result
+  return words.join(' ');
+}
+    
+
+    // 👉 CHALLENGE 5
+    function normalizePhoneNumber(number) {
+  // Check if the input is empty or not exactly 10 characters
+  if (number.length === 0 || number.length !== 10) {
+    return "type a 10-digit number";
+  }
+
+  // Check if the input consists of exactly 10 digits
+  if (/^\d{10}$/.test(number)) {
+    // Create a template for the normalized phone number
+    const template = "(XXX) XXX-XXXX";
+
+    // Convert the number to an array of digits for easy manipulation
+    const digits = number.split('');
+
+    // Replace 'X' in the template with digits
+    let result = "";
+    for (let i = template.length - 1; i >= 0; i--) {
+      if (template[i] === 'X') {
+        result = digits.pop() + result;
+      } else {
+        result = template[i] + result;
+      }
+    }
+
+    return result;
+  } else {
+    // If the input contains non-digit characters
+    return "invalid phone number";
+  }
+}
+
+    // 👉 CHALLENGE 6 (bonus, NOT graded)
+    function diceRolls() {
+  let throws = 0;
+  let consecutiveSixes = 0;
+
+  while (true) {
+    const roll = Math.floor(Math.random() * 6) + 1;
+
+    throws++;
+
+    if (roll === 6) {
+      consecutiveSixes++;
+
+      if (consecutiveSixes === 3) {
+        break;
+      }
+    } else {
+      consecutiveSixes = 0;
+    }
+  }
+
+  return throws;
+}
+
+    // 🧪 TESTS, do not make any changes below this line ===================
+    // 🧪 TESTS, do not make any changes below this line ===================
+    // 🧪 TESTS, do not make any changes below this line ===================
+    globalThis.challengeVersion = 1
+    globalThis.profileActivation = profileActivation
+    globalThis.mineSweeper = mineSweeper
+    globalThis.booleanize = booleanize
+    globalThis.scrub = scrub
+    globalThis.normalizePhoneNumber = normalizePhoneNumber
+
+    try {
+      runTests('CHALLENGE 1 - profileActivation', profileActivation, [
+        [[{}], 'impossible to ascertain status'],
+        [[{ active: true, reason: '' }], 'confirm status manually'],
+        [[{ active: true, reason: 'because' }], 'confirm status manually'],
+        [[{ active: false }], 'confirm status manually'],
+        [[{ active: true }, 'because'], { active: false, reason: 'because' }],
+        [[{ active: false, reason: 'because' }], { active: true }],
+      ])
+      runTests('CHALLENGE 2 - mineSweeper', mineSweeper, [
+        [[[["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]], 0, 4], "invalid coordinates"],
+        [[[["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]], 0, 1], "invalid coordinates"],
+        [[[["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]], 1, 4], "invalid coordinates"],
+        [[[["🟦", "🟦", "🟥"], ["🟦", "🟦", "🟦"], ["🟦", "🟦", "🟥"]], 1, 1], "🟦 🥳"],
+        [[[["🟦", "🟥", "🟦"], ["🟦", "🟦", "🟦"], ["🟥", "🟦", "🟥"]], 2, 1], "🟥 💀"],
+        [[[["🟥", "🟦", "🟥"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟦"]], 3, 1], "🟥 💀"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟦", "🟥"], ["🟦", "🟦", "🟦"]], 1, 2], "🟥 💀"],
+        [[[["🟥", "🟥", "🟥"], ["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟦"]], 2, 2], "🟦 🥳"],
+        [[[["🟥", "🟦", "🟦"], ["🟦", "🟥", "🟥"], ["🟥", "🟥", "🟦"]], 3, 2], "🟥 💀"],
+        [[[["🟥", "🟥", "🟥"], ["🟦", "🟦", "🟥"], ["🟥", "🟥", "🟦"]], 1, 3], "🟥 💀"],
+        [[[["🟥", "🟦", "🟥"], ["🟥", "🟥", "🟥"], ["🟥", "🟦", "🟥"]], 2, 3], "🟦 🥳"],
+        [[[["🟥", "🟥", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟥", "🟦"]], 3, 3], "🟦 🥳"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟥"]], 1, 1], "🟥 💀"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟥"]], 2, 2], "🟥 💀"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟥"]], 3, 3], "🟥 💀"],
+      ])
+      runTests('CHALLENGE 3 - booleanize', booleanize, [
+        [[{ bad1: null }], {}],
+        [[{ bad1: null, bad2: null }], {}],
+        [[{ '0123456789': 1 }], 'shorten all prop names to 9 chars or less'],
+        [[{ a: 1, b: 1 }], { a: true, b: true }],
+        [[{ a: 0, b: 0 }], { a: false, b: false }],
+        [[{ a: 1, b: 0, c: null, d: 'Lady Gaga' }], { a: true, b: false, d: 'Lady Gaga' }],
+      ])
+      runTests('CHALLENGE 4 - scrub', scrub, [
+        [["out of the silent planet", ["of", "silent"]], "out xx the xxxxxx planet"],
+        [["out of the silent planet", ["of", "planet"]], "out xx the silent xxxxxx"],
+        [["the ghost of the navigator", ["the"]], "xxx ghost of xxx navigator"],
+        [["lost somewhere in time", []], "lost somewhere in time"],
+        [["aces high", ["high", "aces", "hearts"]], "xxxx xxxx"],
+        [["", ["high", "aces"]], ""],
+      ])
+      runTests('CHALLENGE 5 - normalizePhoneNumber', normalizePhoneNumber, [
+        [["1234567890"], "(123) 456-7890"],
+        [["1111111111"], "(111) 111-1111"],
+        [["9876543210"], "(987) 654-3210"],
+        [[""], "type a 10-digit number"],
+        [["x"], "type a 10-digit number"],
+        [["987654321"], "type a 10-digit number"],
+        [["98765432100"], "type a 10-digit number"],
+        [["987654321x"], "invalid phone number"],
+        [["x876543210"], "invalid phone number"],
+        [["98765x3210"], "invalid phone number"],
+      ])
+      console.log('\nCHALLENGE 6 does not have auto tests')
+      function runTests(testName, func, tests) {
+        let results = []
+        tests.forEach(test => {
+          const originalArgsList = _.cloneDeep(test[0])
+          const argsList = test[0]
+          const expected = test[1]
+          const actual = func.apply(null, argsList)
+          results.push([argsList, expected, actual, originalArgsList])
+        })
+        console.log('\n' + testName)
+        if (results.every(result => _.isEqual(result[1], result[2]))) console.log('\t✅ All tests pass')
+        else if (results.every(result => !_.isEqual(result[1], result[2]))) console.log('\t❌ All tests fail')
+        else results.forEach((result, idx) => {
+          if (_.isEqual(result[1], result[2])) console.log(`\t✅ Test ${idx + 1} passes`)
+          else console.log(`\t❌ Test ${idx + 1} fails:
+        ${func.name}(${result[3].map(JSON.stringify)})
+        👉 should return ${JSON.stringify(result[1])}
+        👉 but returns ${JSON.stringify(result[2])}`)
+        })
+      }
+      const gridElems = [Array.from(row1.children), Array.from(row2.children), Array.from(row3.children)]
+      const squares = ["🟥", "🟦"]
+      let grid = [[], [], []]
+      gridElems.forEach((row, idxRow) => {
+        row.forEach((square, idxSquare) => {
+          const emoji = squares[Math.floor(Math.random() * 2)]
+          grid[idxRow].push(emoji)
+          if (emoji === squares[0]) square.style.backgroundColor = '#ffecec'
+          else square.style.backgroundColor = '#f2f2ff'
+          square.onclick = () => {
+            const x = idxSquare + 1
+            const y = idxRow + 1
+            console.log(`\nYou clicked coordinates [${x}, ${y}]`)
+            outcome.textContent = mineSweeper(grid, x, y)
+          }
+        })
+      })
+      phoneNumInput.oninput = evt => {
+        normalized.textContent = normalizePhoneNumber(evt.target.value)
+      }
+    } catch (err) { console.error(err.stack) }
+  </script>
+</body>
+
+</html>
